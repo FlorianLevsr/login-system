@@ -11,7 +11,7 @@ router.post('/signup', authController.signUp)
 router.post('/login', authController.signIn)
 router.get('/logout', authController.signOut)
 
-router.get('/member/:id', authenticateToken, userController.getOneUser)
+router.get('/profile/:id', authenticateToken, userController.getOneUser)
 router.get('/pending-subscriptions', authenticateToken, userController.getAllPendingSubscriptions)
 router.get('/validate-sub/:id', authenticateToken, userController.validateSubscription)
 router.get('/refuse-sub/:id', authenticateToken, userController.refuseSubscription)
