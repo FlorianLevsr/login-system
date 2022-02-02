@@ -40,7 +40,7 @@ const userController = {
 
   refuseSubscription: async (req, res) => {
 
-    // considering that new subscribers already have the validated attribute set automatically to false when signing up
+    // considering that new subscribers already have the validated attribute set automatically to false when signing in
     // this method may appear useless and yet it allows an admin to remove the access of an already validated user if needed
     // so, it should be named 'banValidatedMember' instead but I kept its current name to avoid confusion and/or in case of future changes
     try {

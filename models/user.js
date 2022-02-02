@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 var { validate } = require("email-validator");
 const argon2 = require('argon2');
+
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -28,6 +29,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: process.env.DEFAULT_VALIDATION_STATE //false
     },
+    admin: {
+      type: Boolean,
+      default: false
+    },
   },
   {
     timestamps: true
@@ -37,7 +42,7 @@ const userSchema = new mongoose.Schema(
 
 userSchema.pre("save", async function (next) {
 
-  // automatically hash stored password
+  // automatically hash stored passwords
   this.password = await argon2.hash(this.password, process.env.ARGON_SECRET_HASH);
   next();
 
@@ -45,14 +50,26 @@ userSchema.pre("save", async function (next) {
 
 userSchema.statics.login = async function (username, password) {
 
-  const user = await this.findOne({ username });
-  if (!user) throw Error('Incorrect username');
+  let message;
 
-  const comparison = await argon2.verify(user.password, password);
-  if (!comparison) throw Error('Incorrect password');
+  const user = await this.find({ username: username });
 
-  user.password = undefined;
-  return user;
+  if (!user[0]) {
+
+    message = 'Incorrect username';
+
+  } else {
+
+    if (!user[0].validated) message = 'User has not been validated yet, please wait until an admin validates your account';
+    const comparison = await argon2.verify(user[0].password, password);
+    if (!comparison) message = 'Incorrect password';
+
+  }
+
+  user[0].password = undefined; //remove the password from returned data
+  user[0].errorMessage = message;
+
+  return user[0];
 
 };
 
