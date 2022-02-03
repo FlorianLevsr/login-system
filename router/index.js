@@ -10,13 +10,13 @@ router.get('/', function (_, res) { res.status(200).send('login-system live demo
 
 router.post('/signup', authController.signUp)
 router.post('/login', authController.signIn)
-router.get('/logout', authController.signOut)
+router.delete('/logout', authController.signOut)
 
 router.get('/profile/:id', authenticateToken, userController.getOneUser)
 
 router.get('/pending-subscriptions', authenticateToken, adminRoleRequired, userController.getAllPendingSubscriptions)
-router.get('/validate-sub/:id', authenticateToken, adminRoleRequired, userController.validateSubscription)
-router.get('/refuse-sub/:id', authenticateToken, adminRoleRequired, userController.refuseSubscription)
+router.put('/validate-sub/:id', authenticateToken, adminRoleRequired, userController.validateSubscription)
+router.put('/refuse-sub/:id', authenticateToken, adminRoleRequired, userController.refuseSubscription)
 
 router.use((_, res) => {
   res.sendStatus(404);

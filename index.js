@@ -4,6 +4,12 @@ require('dotenv').config();
 const cors = require('cors')
 const router = require('./router')
 
+// swagger UI init
+const swaggerUi = require('swagger-ui-express'),
+YAML = require('yamljs');
+const swaggerDocument = YAML.load('./swagger.yaml');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 // Mongo DB Atlas client
 require('./database/atlas');
 
@@ -21,4 +27,5 @@ const PORT = process.env.PORT || 4000;
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
+    console.log(`OpenAPI documentation available in /api-docs`);
 });

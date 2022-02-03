@@ -1,0 +1,164 @@
+openapi: 3.0.0
+info:
+  title: Auth API
+  description: Login system with admin validation on subscription
+  version: 1.0.0
+servers:
+  - url: http://localhost:3000
+    description: local server - development
+  - url: http://stillneedtobehosted.domain
+    description: live demo - hosted version
+tags:
+  - name: Public
+    description: "Routes available to all visitors"
+  - name: User-exclusive
+    description: "Routes exclusively available to authenticated and validated users"
+  - name: Admin-exclusive
+    description: "Routes exclusively available to admin user"
+paths:
+  /signup:
+    post:
+      summary: Registration
+      description: Allows visitors to sign up
+      tags:
+        - Public
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - email
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+            schemaUpdate:
+      responses:
+        '200':
+          description: OK - Successfull operation
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
+  /login:
+    post:
+      summary: Authentication
+      description: Allows visitors to sign in
+      tags:
+        - Public
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+            schemaUpdate:
+      responses:
+        '200':
+          description: OK - Successfull operation
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
+  /logout:
+    delete:
+      summary: Disconnection
+      description: Allows users to log out
+      tags:
+        - Public
+      responses:
+        '200':
+          description: OK - Successfull operation
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
+  /profile/{id}:
+    get:
+      summary: Displays a designated user's profile
+      description: Allows validated members to check a user's profile
+      tags:
+        - User-exclusive
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the designated user
+      responses:
+        '200':
+          description: OK - Successfull operation
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
+  /pending-subscriptions:
+    get:
+      summary: Displays a list of the pending subscriptions
+      description: Allows admin to get a list of all the pending subscriptions
+      tags:
+        - Admin-exclusive
+      responses:
+        '200':
+          description: OK - Successfull operation
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
+  /validate-sub/{id}:
+    put:
+      summary: Validates a pending subscription
+      description: Allows admin to validate subscription a designated user
+      tags:
+        - Admin-exclusive
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the designated user
+      responses:
+        '200':
+          description: OK - Successfull operation
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
+  /refuse-sub/{id}:
+    put:
+      summary: Refuses a pending subscription
+      description: Allows admin to refuse subscription a designated user. Note - Considering that new subscribers already have the validated attribute set automatically to false when signing in, this method may appear useless and yet it allows an admin to remove the access of an already validated user if needed. It should be instead named 'banValidatedMember' but I kept its current name to avoid confusion and/or in case of future changes
+      tags:
+        - Admin-exclusive
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: ID of the designated user
+      responses:
+        '200':
+          description: OK - Successfull operation
+          content:
+            application/json:
+              schema: 
+                $ref: '#/components/schemas/ApiResponse'
+components:
+  schemas:
+    ApiResponse:
+      properties:
+        message:
+          type: string
+          description: basic api response with custom message

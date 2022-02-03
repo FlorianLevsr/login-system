@@ -6,6 +6,7 @@ const authController = {
   signUp: async (req, res) => {
     try {
       const { username, email, password } = req.body;
+      console.log('signUp method: ', req.body);
       const user = await UserModel.create({ username, email, password });
       res.status(200).json({ message: 'User successfully created' });
 
