@@ -19,6 +19,7 @@
   "homepage": "https://github.com/FlorianLevsr/api-auth#readme",
   "dependencies": {
     "argon2": "^0.28.3",
+    "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^15.0.0",
     "email-validator": "^2.0.4",

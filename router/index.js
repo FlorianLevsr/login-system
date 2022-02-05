@@ -3,13 +3,14 @@ const router = require('express').Router();
 const authController = require('../controllers/authController');
 const userController = require('../controllers/userController');
 
-const { adminRoleRequired } = require('../middleware/adminRoleRequired');
+const { denyAccessToLoggedUsers } = require('../middleware/denyAccessToLoggedUsers');
 const { authenticateToken } = require('../middleware/authenticateToken');
+const { adminRoleRequired } = require('../middleware/adminRoleRequired');
 
 router.get('/', function (_, res) { res.status(200).send('login-system live demo') })
 
-router.post('/signup', authController.signUp)
-router.post('/login', authController.signIn)
+router.post('/signup', denyAccessToLoggedUsers, authController.signUp)
+router.post('/login', denyAccessToLoggedUsers, authController.signIn)
 router.delete('/logout', authController.signOut)
 
 router.get('/profile/:id', authenticateToken, userController.getOneUser)

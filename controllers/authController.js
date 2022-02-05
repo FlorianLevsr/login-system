@@ -5,6 +5,7 @@ const authController = {
 
   signUp: async (req, res) => {
     try {
+      
       const { username, email, password } = req.body;
       console.log('signUp method: ', req.body);
       const user = await UserModel.create({ username, email, password });
@@ -35,7 +36,7 @@ const authController = {
 
     } catch (err) {
 
-      res.status(500).json({message: err})
+      res.status(500).json({ message: err })
 
     };
 
@@ -43,7 +44,6 @@ const authController = {
 
   signOut: async (_, res) => {
 
-    // erase cookie value & set maxAge age to 0 in order to remove the cookie from the user's browser
     res.cookie('jwt', '', { maxAge: 0 });
     res.status(200).json({ message: 'User successfully logged out' })
 

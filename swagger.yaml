@@ -105,7 +105,7 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiResponse'
+                $ref: '#/components/schemas/User'
   /pending-subscriptions:
     get:
       summary: Displays a list of the pending subscriptions
@@ -118,7 +118,9 @@ paths:
           content:
             application/json:
               schema: 
-                $ref: '#/components/schemas/ApiResponse'
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
   /validate-sub/{id}:
     put:
       summary: Validates a pending subscription
@@ -161,4 +163,20 @@ components:
       properties:
         message:
           type: string
-          description: basic api response with custom message
+          description: basic api response with custom message based on request
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          example: username
+        email:
+          type: string
+          example: email
+        validated:
+          type: boolean
+          example: false
+        admin:
+          type: boolean
+          example: false
+        
