@@ -1,0 +1,32 @@
+{
+  "User": [
+    {
+      "username": "admintest",
+      "password": "admintest",
+      "email": "admintest@admintest.com",
+      "validated": true,
+      "admin": true
+    },
+    {
+      "username": "usertest",
+      "password": "usertest",
+      "email": "usertest@usertest.com",
+      "validated": true,
+      "admin": false
+    },
+    {
+      "username": "pendingaccount1",
+      "password": "pendingaccount1",
+      "email": "pendingaccount1@pendingaccount1.com",
+      "validated": false,
+      "admin": false
+    },
+    {
+      "username": "pendingaccount2",
+      "password": "pendingaccount2",
+      "email": "pendingaccount2@pendingaccount2.com",
+      "validated": false,
+      "admin": false
+    }
+  ]
+}
