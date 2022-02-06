@@ -1,0 +1,4 @@
+{
+  "name": "api-auth",
+  "preset": "@shelf/jest-mongodb"
+}
