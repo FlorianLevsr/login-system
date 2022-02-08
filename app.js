@@ -14,7 +14,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 require('./database/atlas');
 
 // * wildcard / no whitelist, CORS-enabled for all origins for convenience 
-app.use(cors())
+app.use(cors());
 
 // built-in parsers
 app.use(express.json());
@@ -27,9 +27,4 @@ app.use(cookieParser());
 // router
 app.use(router);
 
-const PORT = process.env.PORT || 4000;
-
-app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`);
-    console.log(`OpenAPI documentation available in /api-docs`);
-});
+module.exports = app;
