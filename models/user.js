@@ -52,24 +52,18 @@ userSchema.statics.login = async function (username, password) {
 
   let message;
 
-  const user = await this.find({ username: username });
-
-  if (!user[0]) {
-
-    message = 'Incorrect username';
-
+  let user = await this.findOne({ username: username });
+  
+  if (!user) {
+    throw Error ('Incorrect username');
   } else {
-
-    if (!user[0].validated) message = 'User has not been validated yet, please wait until an admin validates your account';
-    const comparison = await argon2.verify(user[0].password, password);
-    if (!comparison) message = 'Incorrect password';
-
+    const comparison = await argon2.verify(user.password, password);
+    if (!comparison) throw Error ('Incorrect password');
+    if (!user.validated) throw Error ('User has not been validated yet, please wait until an admin validates your account');
+    user.password = undefined; //remove the password from returned data
   }
 
-  user[0].password = undefined; //remove the password from returned data
-  user[0].errorMessage = message;
-
-  return user[0];
+  return user;
 
 };
 

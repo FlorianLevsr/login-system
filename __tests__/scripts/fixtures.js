@@ -1,5 +1,7 @@
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
+const data = require('../../data.json');
+const argon2 = require('argon2');
 
 describe('Fixtures script', () => {
 
@@ -28,22 +30,24 @@ describe('Fixtures script', () => {
 
   });
 
-  it('should insert a document into designated collection', async () => {
+  it('should insert documents into designated collection', async () => {
 
-    const mockUser = {
-      "username": "testuser",
-      "password": "password",
-      "email": "testuser@test.com",
-      "validated": false,
-      "admin": false,
-      "createAt": new Date(),
-      "updatedAt": new Date(),
+    const { User } = data;
+
+    for (const user of User) {
+      await db.collection("users").insertOne({
+        "username": user.username,
+        "password": await argon2.hash(user.password, process.env.ARGON_SECRET_HASH),
+        "email": user.email,
+        "validated": user.validated,
+        "admin": user.admin,
+        "createAt": new Date(),
+        "updatedAt": new Date(),
+      })
     }
 
-    await db.collection("users").insertOne(mockUser);
-
-    const insertedDocument = await db.collection("users").findOne({ username: "testuser" });
-    expect(insertedDocument).toEqual(mockUser)
+    const insertedDocument = await db.collection("users").findOne({ username: "admintest" });
+    expect(insertedDocument.username).toEqual("admintest")
 
   });
 
